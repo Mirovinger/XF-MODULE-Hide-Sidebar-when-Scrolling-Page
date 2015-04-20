@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Copyright © 2015 CYBERSPACE Industries
+  Contacts: http://cyberspace.industries/
+  License: LICENSE.ENG.txt / LICENSE.RUS.txt
+-->
+<addon addon_id="csiXF_hideSSP" title="(CSI/XF/MODULE) Скрытие боковой панели при прокрутке страницы" version_string="1.0.0" version_id="1" url="http://cyberspace.industries/" install_callback_class="" install_callback_method="" uninstall_callback_class="" uninstall_callback_method="">
+  <admin_navigation/>
+  <admin_permissions/>
+  <admin_style_properties/>
+  <admin_templates/>
+  <admin_template_modifications/>
+  <code_events/>
+  <code_event_listeners/>
+  <cron/>
+  <email_templates/>
+  <email_template_modifications/>
+  <optiongroups/>
+  <permissions>
+    <permission_groups/>
+    <permissions/>
+    <interface_groups/>
+  </permissions>
+  <phrases/>
+  <route_prefixes/>
+  <style_properties/>
+  <templates>
+    <template title="csiXF_hideSSP_js" version_id="1" version_string="1.0.0"><![CDATA[<xen:if is="{$sidebar}">
+<script type="text/javascript">
+jQuery(document).ready(function() {
+  var mainContent = 'div.mainContent';
+  var sidebar     = 'div.sidebar';
+  var addSidebar  = 'csiXF_addSidebar';
+  var rmSidebar   = 'csiXF_rmSidebar';
+  var height      = jQuery('#csiSidebarClose').offset().top;
+
+  jQuery(window).scroll(function() {
+    if (jQuery(this).scrollTop() > height) {
+      jQuery(sidebar).addClass(rmSidebar).removeClass(addSidebar);
+      jQuery(mainContent).addClass(rmSidebar).removeClass(addSidebar);
+    } else {
+      jQuery(sidebar).addClass(addSidebar).removeClass(rmSidebar);
+      jQuery(mainContent).addClass(addSidebar).removeClass(rmSidebar);
+    }
+  });
+});
+</script>
+</xen:if>]]></template>
+    <template title="csiXF_hideSSP_close" version_id="1" version_string="1.0.0"><![CDATA[<div id="csiSidebarClose"></div>]]></template>
+    <template title="csiXF_hideSSP.css" version_id="1" version_string="1.0.0"><![CDATA[div.mainContent.csiXF_addSidebar {
+  margin-right: {xen:calc '{xen:property sidebar.width} + 10'}px;
+}
+
+div.mainContent.csiXF_rmSidebar {
+  margin-right: 0;
+}
+
+div.sidebar.csiXF_addSidebar {
+  display: block;
+}
+
+div.sidebar.csiXF_rmSidebar {
+  display: none;
+}]]></template>
+  </templates>
+  <public_template_modifications>
+    <modification template="page_container_js_head" modification_key="csiXF_hideSSP_js" description="Добавление шаблона &quot;csiXF_hideSSP_js&quot;" execution_order="99999999" enabled="1" action="str_replace">
+      <find><![CDATA[<!--XenForo_Require:JS-->]]></find>
+      <replace><![CDATA[$0
+<xen:include template="csiXF_hideSSP_js" />]]></replace>
+    </modification>
+    <modification template="PAGE_CONTAINER" modification_key="csiXF_hideSSP_close" description="Добавление шаблона &quot;csiXF_hideSSP_close&quot;" execution_order="99999999" enabled="1" action="str_replace">
+      <find><![CDATA[<xen:include template="ad_sidebar_bottom" />]]></find>
+      <replace><![CDATA[$0
+<xen:include template="csiXF_hideSSP_close" />]]></replace>
+    </modification>
+    <modification template="PAGE_CONTAINER" modification_key="csiXF_hideSSPcss" description="Добавление шаблона &quot;csiXF_hideSSP.css&quot;" execution_order="99999999" enabled="1" action="str_replace">
+      <find><![CDATA[<!--XenForo_Require:CSS-->]]></find>
+      <replace><![CDATA[$0
+<xen:require css="csiXF_hideSSP.css" />]]></replace>
+    </modification>
+  </public_template_modifications>
+  <bb_code_media_sites/>
+  <bb_codes/>
+</addon>
