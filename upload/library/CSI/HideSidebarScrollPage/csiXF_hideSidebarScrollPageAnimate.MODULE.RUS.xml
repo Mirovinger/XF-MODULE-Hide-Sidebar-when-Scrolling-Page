@@ -15,13 +15,26 @@
   <cron/>
   <email_templates/>
   <email_template_modifications/>
-  <optiongroups/>
+  <optiongroups>
+    <group group_id="csiXF_hideSSP" display_order="99999999" debug_only="0"/>
+    <option option_id="csiXF_hideSSP_duration" edit_format="spinbox" data_type="string" can_backup="1">
+      <default_value>200</default_value>
+      <edit_format_params></edit_format_params>
+      <sub_options></sub_options>
+      <relation group_id="csiXF_hideSSP" display_order="1"/>
+    </option>
+  </optiongroups>
   <permissions>
     <permission_groups/>
     <permissions/>
     <interface_groups/>
   </permissions>
-  <phrases/>
+  <phrases>
+    <phrase title="option_csiXF_hideSSP_duration" version_id="1" version_string="1.0.0"><![CDATA[Продолжительность выполнения анимации]]></phrase>
+    <phrase title="option_csiXF_hideSSP_duration_explain" version_id="1" version_string="1.0.0"><![CDATA[Может быть задана в миллисекундах или строковым значением "fast" или "slow" (200 и 600 миллисекунд).]]></phrase>
+    <phrase title="option_group_csiXF_hideSSP" version_id="1" version_string="1.0.0"><![CDATA[(CSI/XF/MODULE) Скрытие боковой панели при прокрутке страницы]]></phrase>
+    <phrase title="option_group_csiXF_hideSSP_description" version_id="1" version_string="1.0.0"><![CDATA[Исчезновение боковой панели форума при прокрутки страницы. Когда боковая панель выходит из области видимости, она исчезает, а форум расширяется на всю страницу.]]></phrase>
+  </phrases>
   <route_prefixes/>
   <style_properties/>
   <templates>
@@ -30,17 +43,17 @@
 jQuery(document).ready(function() {
   var csiContent    = 'div.mainContent';
   var csiSidebar    = 'div.sidebar';
-  var csiAddSidebar = 'csiAddSidebar';
-  var csiRmSidebar  = 'csiRmSidebar';
   var csiHeight     = jQuery('#csiSidebarClose').offset().top;
 
   jQuery(window).scroll(function() {
     if (jQuery(this).scrollTop() > csiHeight) {
-      jQuery(csiSidebar).addClass(csiRmSidebar).removeClass(csiAddSidebar);
-      jQuery(csiContent).addClass(csiRmSidebar).removeClass(csiAddSidebar);
+      jQuery(csiSidebar).stop(true).fadeOut({$xenOptions.csiXF_hideSSP_duration}, function() {
+        jQuery(csiContent).stop(true).animate({'margin-right':'0'}, {$xenOptions.csiXF_hideSSP_duration});
+      });
     } else {
-      jQuery(csiSidebar).addClass(csiAddSidebar).removeClass(csiRmSidebar);
-      jQuery(csiContent).addClass(csiAddSidebar).removeClass(csiRmSidebar);
+      jQuery(csiContent).stop(true).animate({'margin-right':'{xen:calc '{xen:property sidebar.width} + 10'}px'}, {$xenOptions.csiXF_hideSSP_duration}, function() {
+        jQuery(csiSidebar).stop(true).fadeIn({$xenOptions.csiXF_hideSSP_duration});
+      });
     }
   });
 });
